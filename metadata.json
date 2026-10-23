@@ -1,0 +1,6 @@
+{
+  "name": "AuraCare Health - Dr. Sarah Jenkins, MD",
+  "description": "Modern professional medical clinic and private practice website with online appointment booking, specializations, treatments, and patient care resources.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
