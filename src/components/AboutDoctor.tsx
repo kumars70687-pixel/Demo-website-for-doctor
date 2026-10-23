@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Award, GraduationCap, Building2, Languages, FileCheck, CheckCircle2, ChevronRight, X, HeartPulse } from 'lucide-react';
+import { Award, GraduationCap, Building2, Languages, FileCheck, CheckCircle2, ChevronRight, X, HeartPulse, UserCheck } from 'lucide-react';
 import { DoctorProfile } from '../data/mockMedicalData';
+import { doctorConsultation } from '../assets/images';
 
 interface AboutDoctorProps {
   doctor: DoctorProfile;
@@ -15,18 +16,32 @@ export const AboutDoctor: React.FC<AboutDoctorProps> = ({ doctor, onOpenBooking 
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
           {/* Left Column: Authentic Consultation Image & Badges */}
-          <div className="lg:col-span-5 flex flex-col gap-5">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-100">
+          <div className="lg:col-span-5 flex flex-col gap-5 w-full">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-100 min-h-[280px] sm:min-h-[360px]">
+              {/* Fallback container underneath image */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-100 via-teal-50 to-blue-50 flex flex-col items-center justify-center p-6 text-center text-slate-500">
+                <UserCheck className="w-12 h-12 text-[#20A39E]/40 mb-2" />
+                <span className="text-sm font-semibold text-[#172B4D]">Dedicated Consultation</span>
+              </div>
+
               <img
-                src="/src/assets/images/doctor_patient_consultation_1792776877115.jpg"
+                src={doctorConsultation}
                 alt={`${doctor.name} in consultation with a patient`}
-                className="w-full h-80 sm:h-96 object-cover object-center"
+                className="relative z-10 w-full h-72 sm:h-88 md:h-96 object-cover object-center"
+                loading="lazy"
+                decoding="async"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  if (target.src !== '/images/doctor_patient_consultation.jpg') {
+                    target.src = '/images/doctor_patient_consultation.jpg';
+                  }
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#172B4D]/80 via-transparent to-transparent flex items-end p-6">
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#172B4D]/85 via-transparent to-transparent flex items-end p-5 sm:p-6 pointer-events-none">
                 <div className="text-white">
-                  <p className="text-sm font-semibold tracking-wide text-teal-300 uppercase">Consultation Philosophy</p>
-                  <p className="text-base font-medium mt-1">"Listening is the foundational diagnostic tool."</p>
+                  <p className="text-xs sm:text-sm font-semibold tracking-wide text-teal-300 uppercase">Consultation Philosophy</p>
+                  <p className="text-sm sm:text-base font-medium mt-1">"Listening is the foundational diagnostic tool."</p>
                 </div>
               </div>
             </div>

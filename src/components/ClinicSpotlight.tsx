@@ -1,6 +1,7 @@
 import React from 'react';
-import { Building, Sparkles, Shield, Wifi, Car, Accessibility } from 'lucide-react';
+import { Building, Sparkles, Shield, Wifi, Car, Accessibility, Landmark } from 'lucide-react';
 import { DoctorProfile } from '../data/mockMedicalData';
+import { clinicInterior } from '../assets/images';
 
 interface ClinicSpotlightProps {
   doctor: DoctorProfile;
@@ -12,18 +13,33 @@ export const ClinicSpotlight: React.FC<ClinicSpotlightProps> = ({ doctor }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Image Asset */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 bg-slate-100 aspect-video lg:aspect-[4/3]">
+          <div className="lg:col-span-6 relative w-full">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200/80 bg-slate-100 aspect-video lg:aspect-[4/3] min-h-[240px] sm:min-h-[300px]">
+              {/* Fallback container underneath image */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-teal-50 to-slate-100 flex flex-col items-center justify-center p-6 text-center text-slate-500">
+                <Landmark className="w-12 h-12 text-[#1769AA]/40 mb-2" />
+                <span className="text-sm font-semibold text-[#172B4D]">{doctor.clinicName}</span>
+                <span className="text-xs text-slate-500">Modern Clinical Suites</span>
+              </div>
+
               <img
-                src="/src/assets/images/clinic_interior_1792776876900.jpg"
+                src={clinicInterior}
                 alt="AuraCare Medical Clinic interior and patient reception"
-                className="w-full h-full object-cover"
+                className="relative z-10 w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  if (target.src !== '/images/clinic_interior.jpg') {
+                    target.src = '/images/clinic_interior.jpg';
+                  }
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#172B4D]/75 via-transparent to-transparent flex items-end p-6">
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#172B4D]/80 via-transparent to-transparent flex items-end p-5 sm:p-6 pointer-events-none">
                 <div className="text-white">
                   <p className="text-xs font-semibold uppercase tracking-wider text-teal-300">San Francisco Practice</p>
-                  <p className="text-base font-bold mt-0.5">{doctor.clinicName}</p>
+                  <p className="text-base sm:text-lg font-bold mt-0.5">{doctor.clinicName}</p>
                   <p className="text-xs text-slate-200">{doctor.clinicAddress}</p>
                 </div>
               </div>

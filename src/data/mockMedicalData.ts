@@ -1,3 +1,5 @@
+import { doctorPortrait } from '../assets/images';
+
 export interface DoctorProfile {
   name: string;
   title: string;
@@ -103,7 +105,7 @@ export const DEFAULT_DOCTOR_PROFILE: DoctorProfile = {
   ],
   languages: ["English (Native)", "Spanish (Professional Clinical)"],
   clinicAffiliation: "AuraCare Medical Group · Attending Physician at MetroHealth Academic Hospital",
-  portraitUrl: "/src/assets/images/doctor_portrait_1792776876062.jpg",
+  portraitUrl: doctorPortrait,
   consultationFeeBase: 150,
   clinicName: "AuraCare Medical Center",
   clinicAddress: "450 Medical Heights Plaza, Suite 320",

@@ -28,13 +28,20 @@ import {
   PatientReview, 
   AppointmentRecord 
 } from './data/mockMedicalData';
+import { doctorPortrait } from './assets/images';
 
 export default function App() {
   // Doctor profile with local storage sync
   const [doctor, setDoctor] = useState<DoctorProfile>(() => {
     try {
       const saved = localStorage.getItem('auracare_doctor_profile');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (!parsed.portraitUrl || parsed.portraitUrl.includes('/src/assets/')) {
+          parsed.portraitUrl = doctorPortrait;
+        }
+        return parsed;
+      }
     } catch (e) {
       console.error(e);
     }

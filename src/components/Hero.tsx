@@ -1,6 +1,7 @@
-import React from 'react';
-import { ShieldCheck, HeartHandshake, CalendarCheck, ArrowRight, Award, CheckCircle, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, HeartHandshake, CalendarCheck, ArrowRight, Award, CheckCircle, Clock, Stethoscope } from 'lucide-react';
 import { DoctorProfile } from '../data/mockMedicalData';
+import { doctorPortrait, resolveImageUrl } from '../assets/images';
 
 interface HeroProps {
   doctor: DoctorProfile;
@@ -88,49 +89,65 @@ export const Hero: React.FC<HeroProps> = ({ doctor, onOpenBooking, onExploreServ
           </div>
 
           {/* Right Column: Doctor Portrait with Floating Credential Cards */}
-          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md">
+          <div className="lg:col-span-5 relative flex justify-center lg:justify-end w-full">
+            <div className="relative w-full max-w-[320px] sm:max-w-md mx-auto lg:mr-0">
               {/* Outer soft card container with rounded corners */}
-              <div className="relative z-10 rounded-2xl overflow-hidden bg-white shadow-xl shadow-slate-900/8 border border-slate-200/80 aspect-[3/4]">
+              <div className="relative z-10 rounded-2xl overflow-hidden bg-slate-100 shadow-xl shadow-slate-900/8 border border-slate-200/80 aspect-[3/4] min-h-[360px] sm:min-h-[440px]">
+                {/* Fallback container underneath image */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-teal-50 to-slate-100 flex flex-col items-center justify-center p-6 text-center text-slate-500">
+                  <Stethoscope className="w-16 h-16 text-[#1769AA]/40 mb-2" />
+                  <span className="font-bold text-[#172B4D]">{doctor.name}</span>
+                  <span className="text-xs text-slate-500">{doctor.specialization}</span>
+                </div>
+
                 <img
-                  src={doctor.portraitUrl}
+                  src={resolveImageUrl(doctor.portraitUrl, doctorPortrait)}
                   alt={`${doctor.name}, ${doctor.title}`}
-                  className="w-full h-full object-cover object-top"
+                  className="relative z-10 w-full h-full object-cover object-top"
+                  loading="eager"
+                  decoding="async"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    // Try static public path if bundled fails
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (target.src !== '/images/doctor_portrait.jpg') {
+                      target.src = '/images/doctor_portrait.jpg';
+                    }
+                  }}
                 />
 
                 {/* Subtle scrim at bottom for text readability */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#172B4D]/90 via-[#172B4D]/40 to-transparent p-5 text-white">
-                  <p className="font-bold text-lg leading-tight">{doctor.name}, {doctor.title}</p>
+                <div className="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#172B4D]/95 via-[#172B4D]/50 to-transparent p-4 sm:p-5 text-white">
+                  <p className="font-bold text-base sm:text-lg leading-tight">{doctor.name}, {doctor.title}</p>
                   <p className="text-xs text-slate-200 mt-0.5">{doctor.specialization}</p>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-teal-300">
-                    <CheckCircle className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-1.5 mt-2 text-xs text-teal-300">
+                    <CheckCircle className="w-3.5 h-3.5 shrink-0" />
                     <span>Active California Medical License</span>
                   </div>
                 </div>
               </div>
 
-              {/* Floating Experience Badge (top left) */}
-              <div className="absolute -top-4 -left-4 sm:-left-6 z-20 bg-white/95 backdrop-blur-sm rounded-xl p-3.5 shadow-lg border border-slate-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#1769AA]/10 text-[#1769AA] flex items-center justify-center font-bold">
-                  <Award className="w-5 h-5 text-[#1769AA]" />
+              {/* Floating Experience Badge (top left) - mobile tuned */}
+              <div className="absolute -top-3 -left-2 sm:-left-5 z-20 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 sm:p-3.5 shadow-lg border border-slate-100 flex items-center gap-2.5">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#1769AA]/10 text-[#1769AA] flex items-center justify-center font-bold shrink-0">
+                  <Award className="w-4 h-4 sm:w-5 sm:h-5 text-[#1769AA]" />
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-[#172B4D] tabular-nums leading-none">
+                  <div className="text-sm sm:text-lg font-bold text-[#172B4D] tabular-nums leading-none">
                     {doctor.experienceYears}+ Years
                   </div>
-                  <div className="text-xs text-slate-500 mt-0.5">Clinical Practice</div>
+                  <div className="text-[10px] sm:text-xs text-slate-500 mt-0.5">Clinical Practice</div>
                 </div>
               </div>
 
-              {/* Floating Consultation Fee & Availability Badge (bottom right) */}
-              <div className="absolute -bottom-4 -right-4 sm:-right-6 z-20 bg-white/95 backdrop-blur-sm rounded-xl p-3.5 shadow-lg border border-slate-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#20A39E]/10 text-[#20A39E] flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-[#20A39E]" />
+              {/* Floating Consultation Fee & Availability Badge (bottom right) - mobile tuned */}
+              <div className="absolute -bottom-3 -right-2 sm:-right-5 z-20 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 sm:p-3.5 shadow-lg border border-slate-100 flex items-center gap-2.5">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#20A39E]/10 text-[#20A39E] flex items-center justify-center shrink-0">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#20A39E]" />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-500">Initial Consultations</div>
-                  <div className="text-base font-bold text-[#172B4D] tabular-nums leading-none mt-0.5">
+                  <div className="text-[10px] sm:text-xs text-slate-500">Initial Consultations</div>
+                  <div className="text-sm sm:text-base font-bold text-[#172B4D] tabular-nums leading-none mt-0.5">
                     From ${doctor.consultationFeeBase}
                   </div>
                 </div>
